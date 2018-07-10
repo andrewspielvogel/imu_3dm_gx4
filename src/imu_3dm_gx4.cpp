@@ -3,13 +3,12 @@
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <diagnostic_updater/publisher.h>
 
-#include <sensor_msgs/Imu.h>
-#include <sensor_msgs/MagneticField.h>
 #include <sensor_msgs/FluidPressure.h>
 #include <geometry_msgs/Vector3Stamped.h>
 #include <geometry_msgs/QuaternionStamped.h>
 
 #include <imu_3dm_gx4/FilterOutput.h>
+#include <imu_3dm_gx4/Imu9DOF.h> 
 #include "imu.hpp"
 
 using namespace imu_3dm_gx4;
@@ -17,7 +16,6 @@ using namespace imu_3dm_gx4;
 #define kEarthGravity (9.80665)
 
 ros::Publisher pubIMU;
-ros::Publisher pubMag;
 ros::Publisher pubPressure;
 ros::Publisher pubFilter;
 std::string frameId;
@@ -32,8 +30,7 @@ std::shared_ptr<diagnostic_updater::TopicDiagnostic> imuDiag;
 std::shared_ptr<diagnostic_updater::TopicDiagnostic> filterDiag;
 
 void publishData(const Imu::IMUData &data) {
-  sensor_msgs::Imu imu;
-  sensor_msgs::MagneticField field;
+  imu_3dm_gx4::Imu9DOF imu;
   sensor_msgs::FluidPressure pressure;
 
   //  assume we have all of these since they were requested
@@ -51,35 +48,34 @@ void publishData(const Imu::IMUData &data) {
   imu.header.frame_id = frameId;
   pressure.header.stamp = imu.header.stamp;
   pressure.header.frame_id = frameId;
-  if (enableMagnetometer) {
-    field.header.stamp = imu.header.stamp;
-    field.header.frame_id = frameId;
-  }
 
-  imu.orientation_covariance[0] =
-      -1; //  orientation data is on a separate topic
 
-  imu.linear_acceleration.x = data.accel[0] * kEarthGravity;
-  imu.linear_acceleration.y = data.accel[1] * kEarthGravity;
-  imu.linear_acceleration.z = data.accel[2] * kEarthGravity;
-  imu.angular_velocity.x = data.gyro[0];
-  imu.angular_velocity.y = data.gyro[1];
-  imu.angular_velocity.z = data.gyro[2];
+  imu.acc.x = data.accel[0] * kEarthGravity;
+  imu.acc.y = data.accel[1] * kEarthGravity;
+  imu.acc.z = data.accel[2] * kEarthGravity;
+  imu.ang.x = data.gyro[0];
+  imu.ang.y = data.gyro[1];
+  imu.ang.z = data.gyro[2];
 
   pressure.fluid_pressure = data.pressure;
 
   if (enableMagnetometer) {
-    field.magnetic_field.x = data.mag[0];
-    field.magnetic_field.y = data.mag[1];
-    field.magnetic_field.z = data.mag[2];
+    imu.mag.x = data.mag[0];
+    imu.mag.y = data.mag[1];
+    imu.mag.z = data.mag[2];
+  }
+  else {
+
+    imu.mag.x = -1;
+    imu.mag.y = -1;
+    imu.mag.z = -1;
+
   }
 
   //  publish
   pubIMU.publish(imu);
   pubPressure.publish(pressure);
-  if (enableMagnetometer) {
-    pubMag.publish(field);
-  }
+  
   if (imuDiag) {
     imuDiag->tick(imu.header.stamp);
   }
@@ -190,12 +186,9 @@ int main(int argc, char **argv) {
     return -1;
   }
   
-  pubIMU = nh.advertise<sensor_msgs::Imu>("imu", 1);
+  pubIMU = nh.advertise<imu_3dm_gx4::Imu9DOF>("imu", 1);
   pubPressure = nh.advertise<sensor_msgs::FluidPressure>("pressure", 1);
 
-  if (enableMagnetometer) {
-    pubMag = nh.advertise<sensor_msgs::MagneticField>("magnetic_field", 1);
-  }
   if (enableFilter) {
     pubFilter = nh.advertise<imu_3dm_gx4::FilterOutput>("filter", 1);
   }
