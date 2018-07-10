@@ -37,6 +37,7 @@ extern "C" {
 #define kBufferSize        (10) //  keep this small, or 1000Hz is not attainable
 
 #define u8(x) static_cast<uint8_t>((x))
+#define u32(x) static_cast<uint32_t>((x))
 
 #define COMMAND_CLASS_BASE    u8(0x01)
 #define COMMAND_CLASS_3DM     u8(0x0C)
@@ -57,6 +58,7 @@ extern "C" {
 
 //  3DM and FILTER commands
 #define COMMAND_GET_DEVICE_INFO       u8(0x03)
+#define COMMAND_SET_INITIAL_ATT_WITH_MAG u8(0x04)
 #define COMMAND_GET_IMU_BASE_RATE     u8(0x06)
 #define COMMAND_GET_FILTER_BASE_RATE  u8(0x0B)
 #define COMMAND_IMU_MESSAGE_FORMAT    u8(0x08)
@@ -83,6 +85,7 @@ extern "C" {
 #define FIELD_FILTER_BASERATE   u8(0x8A)
 #define FIELD_STATUS_REPORT     u8(0x90)
 #define FIELD_ACK_OR_NACK       u8(0xF1)
+#define FIELD_DECLINATION       u32(0x00000000)
 
 using namespace imu_3dm_gx4;
 
@@ -891,6 +894,15 @@ void Imu::enableFilterStream(bool enabled) {
     assert(p.checkMSB == 0x06 && p.checkLSB == 0x1E);
   }
   sendCommand(p);
+
+  //initialize EKF heading with the magnetometer
+  Packet set_heading_p(COMMAND_CLASS_FILTER);
+  PacketEncoder set_heading_encoder(set_heading_p);
+  set_heading_encoder.beginField(COMMAND_SET_INITIAL_ATT_WITH_MAG);
+  set_heading_encoder.append(FIELD_DECLINATION);
+  set_heading_encoder.endField();
+  set_heading_p.calcChecksum();
+  sendCommand(set_heading_p);
 }
 
 void
