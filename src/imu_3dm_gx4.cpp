@@ -7,8 +7,8 @@
 #include <geometry_msgs/Vector3Stamped.h>
 #include <geometry_msgs/QuaternionStamped.h>
 
-#include <imu_3dm_gx4/FilterOutput.h>
-#include <imu_3dm_gx4/Imu9DOF.h> 
+#include <dscl_msgs/FilterOutput.h>
+#include <dscl_msgs/Imu9DOF.h> 
 #include "imu.hpp"
 
 using namespace imu_3dm_gx4;
@@ -30,7 +30,7 @@ std::shared_ptr<diagnostic_updater::TopicDiagnostic> imuDiag;
 std::shared_ptr<diagnostic_updater::TopicDiagnostic> filterDiag;
 
 void publishData(const Imu::IMUData &data) {
-  imu_3dm_gx4::Imu9DOF imu;
+  dscl_msgs::Imu9DOF imu;
   sensor_msgs::FluidPressure pressure;
 
   //  assume we have all of these since they were requested
@@ -87,7 +87,7 @@ void publishFilter(const Imu::FilterData &data) {
   assert(data.fields & Imu::FilterData::AngleUnertainty);
   assert(data.fields & Imu::FilterData::BiasUncertainty);
   
-  imu_3dm_gx4::FilterOutput output;
+  dscl_msgs::FilterOutput output;
   output.header.stamp = ros::Time::now();
   output.header.frame_id = frameId;
   output.orientation.w = data.quaternion[0];
@@ -186,11 +186,11 @@ int main(int argc, char **argv) {
     return -1;
   }
   
-  pubIMU = nh.advertise<imu_3dm_gx4::Imu9DOF>("imu", 1);
+  pubIMU = nh.advertise<dscl_msgs::Imu9DOF>("imu", 1);
   pubPressure = nh.advertise<sensor_msgs::FluidPressure>("pressure", 1);
 
   if (enableFilter) {
-    pubFilter = nh.advertise<imu_3dm_gx4::FilterOutput>("filter", 1);
+    pubFilter = nh.advertise<dscl_msgs::FilterOutput>("filter", 1);
   }
 
   //  new instance of the IMU

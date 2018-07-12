@@ -6,13 +6,14 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   geometry_msgs
   sensor_msgs
+  dscl_msgs
 )
 
-add_message_files(DIRECTORY msg)
-generate_messages(DEPENDENCIES geometry_msgs)
+#add_message_files(DIRECTORY msg)
+#generate_messages(DEPENDENCIES geometry_msgs)
 
 catkin_package(
-  CATKIN_DEPENDS message_runtime geometry_msgs sensor_msgs)
+  CATKIN_DEPENDS message_runtime geometry_msgs sensor_msgs dscl_msgs)
 
 # include boost
 find_package(Boost REQUIRED)
@@ -28,4 +29,6 @@ target_link_libraries(${PROJECT_NAME}
 add_dependencies(${PROJECT_NAME}
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
-)
+  )
+set_target_properties(mems_bias_publisher PROPERTIES COMPILE_FLAGS "-O3")
+

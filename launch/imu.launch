@@ -17,7 +17,7 @@
 
     <!-- Data rate in Hz -->
     <arg name="imu_rate" default="1000"/>
-    <arg name="filter_rate" default="25"/>
+    <arg name="filter_rate" default="100"/>
 
     <!-- Enable/Disable the magnetometer -->
     <arg name="enable_magnetometer" default="true"/>
