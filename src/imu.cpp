@@ -19,6 +19,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <boost/assert.hpp>
+#include <stdio.h>
 
 extern "C" {
 #include <fcntl.h>
@@ -1064,6 +1065,20 @@ void Imu::processPacket() {
   IMUData data;
   FilterData filterData;
   PacketDecoder decoder(packet_);
+
+  char buffer[256];
+  
+  sprintf(buffer,"%02X%02X%02X%02X",packet_.kSyncMSB,packet_.kSyncLSB,packet_.descriptor,packet_.length);
+
+  for (int i = 0; i < packet_.length; i++)
+  {
+
+    sprintf(buffer,"%s%02X",buffer,packet_.payload[i]);
+
+  }
+  sprintf(buffer,"%s%02X%02X",buffer,packet_.checkMSB,packet_.checkLSB);
+  
+
   
   if (packet_.isIMUData()) {
     //  process all fields in the packet
