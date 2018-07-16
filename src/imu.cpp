@@ -1079,7 +1079,8 @@ void Imu::processPacket() {
 
   }
   sprintf(buffer,"%s%02X%02X",buffer,packet_.checkMSB,packet_.checkLSB);
-  log_this_now(LOG_FID_MST_BINARY_FORMAT, buffer);
+
+  log_this_now_dsl_format(LOG_FID_MST_BINARY_FORMAT,(char *) LOG_FID_MST_BINARY_SUFFIX, buffer);
 
   
   if (packet_.isIMUData()) {
