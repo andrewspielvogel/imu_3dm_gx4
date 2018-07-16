@@ -9,7 +9,7 @@
  *		  Author: gareth
  */
 
-#include "imu.hpp"
+#include "imu_3dm_gx4/imu.hpp"
 #include <chrono>
 #include <locale>
 #include <tuple>

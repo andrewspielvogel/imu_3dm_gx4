@@ -9,7 +9,7 @@
 
 #include <dscl_msgs/FilterOutput.h>
 #include <dscl_msgs/Imu9DOF.h> 
-#include "imu.hpp"
+#include "imu_3dm_gx4/imu.hpp"
 #include "helper_funcs/log.h"      	        /* log utils */
 
 
