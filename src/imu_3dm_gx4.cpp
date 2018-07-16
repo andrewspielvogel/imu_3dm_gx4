@@ -10,7 +10,7 @@
 #include <dscl_msgs/FilterOutput.h>
 #include <dscl_msgs/Imu9DOF.h> 
 #include "imu.hpp"
-#include "imu_3dm_gx4/log.h"      	        /* log utils */
+#include "helper_funcs/log.h"      	        /* log utils */
 
 
 using namespace imu_3dm_gx4;

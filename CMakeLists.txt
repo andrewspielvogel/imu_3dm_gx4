@@ -7,24 +7,21 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   sensor_msgs
   dscl_msgs
+  helper_funcs
 )
 
 #add_message_files(DIRECTORY msg)
 #generate_messages(DEPENDENCIES geometry_msgs)
 
 catkin_package(
-  CATKIN_DEPENDS message_runtime geometry_msgs sensor_msgs dscl_msgs)
+  CATKIN_DEPENDS message_runtime geometry_msgs sensor_msgs dscl_msgs helper_funcs)
 
-# include boost
-find_package(Boost REQUIRED)
-
-include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
-
-#add_definitions("-std=c++0x -Wall -Werror")
 add_definitions("-std=c++0x -Wall")
 
+include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_executable(${PROJECT_NAME} src/imu_3dm_gx4.cpp src/imu.cpp src/log.cpp src/time_util.cpp)
+add_executable(${PROJECT_NAME} src/imu_3dm_gx4.cpp src/imu.cpp)
+
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )
@@ -33,5 +30,5 @@ add_dependencies(${PROJECT_NAME}
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
   )
-set_target_properties(mems_bias_publisher PROPERTIES COMPILE_FLAGS "-O3")
+set_target_properties(imu_3dm_gx4 PROPERTIES COMPILE_FLAGS "-O3")
 

@@ -20,7 +20,7 @@
 #include <stdexcept>
 #include <boost/assert.hpp>
 #include <stdio.h>
-#include "imu_3dm_gx4/log.h"      	        /* log utils */
+#include "helper_funcs/log.h"      	        /* log utils */
 
 
 extern "C" {

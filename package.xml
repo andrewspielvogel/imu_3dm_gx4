@@ -18,6 +18,7 @@
   <depend>geometry_msgs</depend>
   <depend>roscpp</depend>
   <depend>sensor_msgs</depend>
+  <depend>helper_funcs</depend>
   <depend>dscl_msgs</depend>
 
   <export>
