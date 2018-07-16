@@ -17,11 +17,14 @@ catkin_package(
 
 # include boost
 find_package(Boost REQUIRED)
+
 include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 
-add_definitions("-std=c++0x -Wall -Werror")
+#add_definitions("-std=c++0x -Wall -Werror")
+add_definitions("-std=c++0x -Wall")
 
-add_executable(${PROJECT_NAME} src/imu_3dm_gx4.cpp src/imu.cpp)
+
+add_executable(${PROJECT_NAME} src/imu_3dm_gx4.cpp src/imu.cpp src/log.cpp src/time_util.cpp)
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
 )

@@ -3,7 +3,8 @@
    Logging thread for ROV control system
 
    Modification History:
-   DATE         AUTHOR  COMMENT
+   DATE         AUTHO
+R  COMMENT
    14-JUL-2000  LLW      Created and written.
    22-Apr-2001  LLW      Ported to WIN32 for DVLNAV
    13-Apr-2002  LLW      Modified to allow multiple log files open at once.
@@ -20,6 +21,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <time.h>
+#include <iostream>
 
 // #include <vcl/syncobjs.hpp>
 
@@ -28,9 +30,9 @@
 // #include "jasontalk.h"		/* jasontalk protocol and structures */
 // #include "dvlnav.h"
 
-#include "log.h"      	        /* log utils */
-#include "time_util.h"		/* time utils */
-#include "stderr.h"		/* stderr print util */
+#include "imu_3dm_gx4/log.h"      	        /* log utils */
+#include "imu_3dm_gx4/time_util.h"		/* time utils */
+#include "imu_3dm_gx4/stderr.h"		/* stderr print util */
 
 // TCriticalSection * LogCritSec = NULL;
 
@@ -51,11 +53,13 @@ typedef struct {
 
 static logging_t log[LOG_MAX_NUM_LOG_FILES+1] = {{1, (char *) "KVH"},
 						 {1, (char *) "MST"},
+						 {1, (char *) "BMS"},
 						 {0, NULL}
 };
 
-static char * cfg_data_log_dir[LOG_MAX_NUM_LOG_FILES+1] = {(char *) "~/log",
-							   (char *) "~/log",
+static char * cfg_data_log_dir[LOG_MAX_NUM_LOG_FILES+1] = {(char *) "/home/spiels/log",
+							   (char *) "/home/spiels/log",
+							   (char *) "/home/spiels/log",
 							   NULL};
 
 char * PNS_LOG_STRING[65535];
@@ -252,7 +256,7 @@ static int log_open_log_file(int log_fid)
 
 
       /* create the new log file name */
-      sprintf(filename,"%s\\%04d_%02d_%02d_%02d_%02d.%s",
+      sprintf(filename,"%s/%04d_%02d_%02d_%02d_%02d.%s",
 	      cfg_data_log_dir[log_fid],
 	      now.year,
 	      now.month,
@@ -266,9 +270,13 @@ static int log_open_log_file(int log_fid)
       if(log[log_fid].log_file_pointer == NULL)
         {
           if( log_fid == LOG_FID_RDI_BINARY_FORMAT)
-            log[log_fid].log_file_pointer = fopen(filename,"ab");
+	    {
+	      log[log_fid].log_file_pointer = fopen(filename,"ab");
+	    }
           else
+	    {
             log[log_fid].log_file_pointer = fopen(filename,"at");
+	    }
         }
 
       /* check results of fopen operation */
@@ -285,7 +293,7 @@ static int log_open_log_file(int log_fid)
       else
 	{
 	  strcpy(log[log_fid].log_file_name, filename);
-	  stderr_printf("LOG: Opened system     log file %s OK.",log[log_fid].log_file_name);
+	  stderr_printf("LOG: Opened system     log file %s OK.\n",log[log_fid].log_file_name);
 
 	  // if we have opened a new spreadsheet file, log column labels
 	  if( log_fid == LOG_FID_CSV_FORMAT)

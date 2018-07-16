@@ -10,6 +10,8 @@
 #include <dscl_msgs/FilterOutput.h>
 #include <dscl_msgs/Imu9DOF.h> 
 #include "imu.hpp"
+#include "imu_3dm_gx4/log.h"      	        /* log utils */
+
 
 using namespace imu_3dm_gx4;
 
@@ -75,6 +77,12 @@ void publishData(const Imu::IMUData &data) {
   //  publish
   pubIMU.publish(imu);
   pubPressure.publish(pressure);
+
+  char buffer[512];
+  sprintf(buffer,"%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf",imu.header.stamp.toSec(),imu.ang.x,imu.ang.y,imu.ang.z,imu.acc.x,imu.acc.y,imu.acc.z,imu.mag.x,imu.mag.y,imu.mag.z,pressure.fluid_pressure);
+
+  log_this_now(LOG_FID_MST_FORMAT, buffer);
+
   
   if (imuDiag) {
     imuDiag->tick(imu.header.stamp);

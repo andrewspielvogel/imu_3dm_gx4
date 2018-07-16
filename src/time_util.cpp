@@ -26,7 +26,7 @@
   #include <unistd.h>
 #endif
 
-#include "time_util.h"		/* time utilities */
+#include "imu_3dm_gx4/time_util.h"		/* time utilities */
 
 /* variables used for controlling time */
 // #define ROV_TIME_MODE_SYSTEM 0  /* Normal time, use O/S time */
@@ -504,6 +504,53 @@ rov_time_struct_t rov_get_time_struct(void)
    t.sec_rov_time = ftime_time.time +  (((double)ftime_time.millitm) / 1000.0);
 
    return t;
+
+
+   // ---------------------------------------------------------------------
+// UNIX code
+// ---------------------------------------------------------------------
+#else
+  struct timeval  tv;
+  struct timezone tz;
+  double t;
+
+  time_t  current_time;
+  struct tm  *tm;
+
+  current_time = time(NULL);
+  tm = gmtime(&current_time);
+
+  gettimeofday(&tv, &tz);
+
+  t = (((double)tv.tv_sec) + (((double)tv.tv_usec) *0.000001));
+
+  //printf("TIME:  time=%ld sec, %ld usec, %f\n",tv.tv_sec, tv.tv_usec, t);
+  //printf("TIME:  time=%ld/%ld/%ld:%ld:%ld:%ld, %f\n",tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min,tm->tm_sec, t);
+
+  rov_time_struct_t tt;
+
+
+     // assign results to data structures
+   tt.year         = tm->tm_year+1900;
+   tt.month        = tm->tm_mon+1;
+   tt.day          = tm->tm_mday;
+
+   tt.hour         = tm->tm_hour;
+   tt.min          = tm->tm_min;
+   tt.sec_int      = tm->tm_sec;
+   tt.msec_int     = tv.tv_usec/1000;
+   tt.sec_double   = tm->tm_sec + (((double)tv.tv_usec) / 1000000.0);
+
+   tt.sec_today    = tt.sec_double +
+                    (60.0 * tt.min) +
+                    (3600.0* tt.hour);
+
+   tt.sec_rov_time = t;
+
+   
+  return tt;
+
+     
 #endif
 
 }
@@ -597,6 +644,50 @@ rov_time_struct_t rov_get_time_struct(int time_mode)
    t.sec_rov_time = ftime_time.time +  (((double)ftime_time.millitm) / 1000.0);
 
    return t;
+
+      // ---------------------------------------------------------------------
+// UNIX code
+// ---------------------------------------------------------------------
+#else
+  struct timeval  tv;
+  struct timezone tz;
+  double t;
+
+  time_t  current_time;
+  struct tm  *tm;
+
+  current_time = time(NULL);
+  tm = gmtime(&current_time);
+
+  gettimeofday(&tv, &tz);
+
+  t = (((double)tv.tv_sec) + (((double)tv.tv_usec) *0.000001));
+
+  //printf("TIME:  time=%ld sec, %ld usec, %f\n",tv.tv_sec, tv.tv_usec, t);
+  //printf("TIME:  time=%ld/%ld/%ld:%ld:%ld:%ld, %f\n",tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min,tm->tm_sec, t);
+
+  rov_time_struct_t tt;
+
+
+     // assign results to data structures
+   tt.year         = tm->tm_year+1900;
+   tt.month        = tm->tm_mon+1;
+   tt.day          = tm->tm_mday;
+
+   tt.hour         = tm->tm_hour;
+   tt.min          = tm->tm_min;
+   tt.sec_int      = tm->tm_sec;
+   tt.msec_int     = tv.tv_usec/1000;
+   tt.sec_double   = tm->tm_sec + (((double)tv.tv_usec) / 1000000.0);
+
+   tt.sec_today    = tt.sec_double +
+                    (60.0 * tt.min) +
+                    (3600.0* tt.hour);
+
+   tt.sec_rov_time = t;
+
+   
+  return tt;
 #endif
 
 }

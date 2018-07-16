@@ -20,6 +20,8 @@
 #include <stdexcept>
 #include <boost/assert.hpp>
 #include <stdio.h>
+#include "imu_3dm_gx4/log.h"      	        /* log utils */
+
 
 extern "C" {
 #include <fcntl.h>
@@ -1077,7 +1079,7 @@ void Imu::processPacket() {
 
   }
   sprintf(buffer,"%s%02X%02X",buffer,packet_.checkMSB,packet_.checkLSB);
-  
+  log_this_now(LOG_FID_MST_BINARY_FORMAT, buffer);
 
   
   if (packet_.isIMUData()) {
