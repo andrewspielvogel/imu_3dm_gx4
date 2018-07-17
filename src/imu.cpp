@@ -21,6 +21,7 @@
 #include <boost/assert.hpp>
 #include <stdio.h>
 #include "helper_funcs/log.h"      	        /* log utils */
+#include "helper_funcs/time_utils.h"            /* time utils */
 
 
 extern "C" {
@@ -1070,7 +1071,7 @@ void Imu::processPacket() {
 
   char buffer[256];
   
-  sprintf(buffer,"%02X%02X%02X%02X",packet_.kSyncMSB,packet_.kSyncLSB,packet_.descriptor,packet_.length);
+  sprintf(buffer,"%f %f %02X%02X%02X%02X",rov_get_time(), ros::Time::now().toSec(),packet_.kSyncMSB,packet_.kSyncLSB,packet_.descriptor,packet_.length);
 
   for (int i = 0; i < packet_.length; i++)
   {

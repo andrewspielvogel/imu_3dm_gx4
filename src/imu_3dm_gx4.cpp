@@ -79,7 +79,7 @@ void publishData(const Imu::IMUData &data) {
   pubPressure.publish(pressure);
 
   char buffer[512];
-  sprintf(buffer,"%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf",imu.header.stamp.toSec(),imu.ang.x,imu.ang.y,imu.ang.z,imu.acc.x,imu.acc.y,imu.acc.z,imu.mag.x,imu.mag.y,imu.mag.z,pressure.fluid_pressure);
+  sprintf(buffer,"%f %f %lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf",rov_get_time(), ros::Time::now().toSec(),imu.header.stamp.toSec(),imu.ang.x,imu.ang.y,imu.ang.z,imu.acc.x,imu.acc.y,imu.acc.z,imu.mag.x,imu.mag.y,imu.mag.z,pressure.fluid_pressure);
 
   log_this_now_dsl_format(LOG_FID_MST_FORMAT,(char *) LOG_FID_MST_SUFFIX, buffer);
   
