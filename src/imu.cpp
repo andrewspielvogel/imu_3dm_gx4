@@ -9,6 +9,7 @@
  *		  Author: gareth
  */
 
+#include <ros/ros.h>
 #include "imu_3dm_gx4/imu.hpp"
 #include <chrono>
 #include <locale>
@@ -21,7 +22,7 @@
 #include <boost/assert.hpp>
 #include <stdio.h>
 #include "helper_funcs/log.h"      	        /* log utils */
-#include "helper_funcs/time_utils.h"            /* time utils */
+#include "helper_funcs/time_util.h"            /* time utils */
 
 
 extern "C" {

@@ -11,7 +11,7 @@
 #include <dscl_msgs/Imu9DOF.h> 
 #include "imu_3dm_gx4/imu.hpp"
 #include "helper_funcs/log.h"      	        /* log utils */
-
+#include "helper_funcs/time_util.h"
 
 using namespace imu_3dm_gx4;
 
