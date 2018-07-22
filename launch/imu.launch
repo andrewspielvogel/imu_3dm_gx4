@@ -1,7 +1,7 @@
 <launch>
     <!-- Node Settings -->
     <arg name="output" default="screen"/>
-    <arg name="imu" default="imu"/>
+    <arg name="imu" default="ms"/>
 
     <!-- IMU Settings -->
     <arg name="device" default="/dev/ttyS0" />
