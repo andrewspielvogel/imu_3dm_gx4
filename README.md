@@ -65,17 +65,21 @@ Where the base frequency is 1kHz for the GX4. Since decimation values are intege
 
 ## Output
 
-On launch, the node will configure the IMU according to the parameters and then enable streaming node. At least three topics are published:
+On launch, the node will configure the IMU according to the parameters and then enable streaming node. At least two topics are published:
 
-* `/imu_3dm_gx4/imu`: An instance of `sensor_msgs/Imu`. Orientation quaternion not provided in this message since is already part of the filter message.
-* `/imu_3dm_gx4/magnetic_field`: An instance of `sensor_msgs/MagneticField`.
-* `/imu_3dm_gx4/pressure`: An instance of `sensor_msgs/FluidPressure`.
-
-All of the above topics are published with synchronized timestamps.
-
-Additional topics will be published if `enable_filter` is true:
-
-* `/imu_3dm_gx4/filter`: An instance of `imu_3dm_gx4/FilterOuput`. Custom message indicating all the onboard filter outputs.
+- IMU packet (dscl_msgs/Imu9DOF). 
+```
+/frame_id/imu
+```
+- IMU pressure (sensor_msgs/FluidPressure).
+```
+/frame_id/pressure
+```
+Additional topic will be published if `enable_filter` is true:
+- EKF output (dscl_msgs/FilterOutput)
+```
+/imu_3dm_gx4/pressure
+````
 
 ## Known Issues
 
