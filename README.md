@@ -81,6 +81,15 @@ Additional topic will be published if `enable_filter` is true:
 /imu_3dm_gx4/pressure
 ````
 
+## Log Files
+Data logged in two log files. 
+
+IMU hex data logged to /log/microstrain/YEAR_MONTH_DAY_HOUR_MINUTE.BMS
+
+IMU data and logged to /log/microstrain/YEAR_MONTH_DAY_HOUR_MINUTE.MST
+
+EKF filter logged to /log/microstrain/YEAR_MONTH_DAY_HOUR_MINUTE.MSF
+
 ## Generate Documentation
 
 To generate documentation, use doxygen.
