@@ -81,6 +81,23 @@ Additional topic will be published if `enable_filter` is true:
 /imu_3dm_gx4/pressure
 ````
 
+## Generate Documentation
+
+To generate documentation, use doxygen.
+
+- Install doxygen from [here](http://www.stack.nl/~dimitri/doxygen/download.html). Note: you need to install the packages flex and bison before making doxygen with:
+```
+sudo apt install flex
+sudo apt install bison
+```
+
+- Then `cd` into the truenorth directory and run:
+```
+doxygen Doxyfile
+```
+
+- To view the documentation, open `index.html` located in the `html/` directory.
+
 ## Known Issues
 
 * Even when the `enable_mag_update` option is set to false (and the device acknowledges the setting with a positive ACK), the `quat_status` field is received as 3. This has not been fully debugged yet.
