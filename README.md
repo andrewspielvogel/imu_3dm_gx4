@@ -10,6 +10,8 @@ This package works on Ubuntu 12.04, 14.04 and 16.04.
 
 ## Version History
 
+* **0.0.6**:
+  - Forked, added support for 3dm-gx5-25, modified to use DSCL msgs (Andrew Spielvogel)
 * **0.0.5**:
   - Added support for the -15 series (Aaron Hoy)
 * **0.0.4**:
