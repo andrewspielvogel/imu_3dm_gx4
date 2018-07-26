@@ -1071,16 +1071,18 @@ void Imu::processPacket() {
   PacketDecoder decoder(packet_);
 
   char buffer[256];
+  int len =0;
   
-  sprintf(buffer,"%f %f %02X%02X%02X%02X",rov_get_time(), ros::Time::now().toSec(),packet_.kSyncMSB,packet_.kSyncLSB,packet_.descriptor,packet_.length);
+  len += sprintf(buffer,"%f %f %02X%02X%02X%02X",rov_get_time(), ros::Time::now().toSec(),packet_.kSyncMSB,packet_.kSyncLSB,
+          packet_.descriptor,packet_.length);
 
   for (int i = 0; i < packet_.length; i++)
   {
 
-    sprintf(buffer,"%s%02X",buffer,packet_.payload[i]);
+    len += sprintf(&(buffer[len]),"%02X",packet_.payload[i]);
 
   }
-  sprintf(buffer,"%s%02X%02X",buffer,packet_.checkMSB,packet_.checkLSB);
+  len += sprintf(&(buffer[len]),"%02X%02X",packet_.checkMSB,packet_.checkLSB);
 
   log_this_now_dsl_format(LOG_FID_MST_BINARY_FORMAT,(char *) LOG_FID_MST_BINARY_SUFFIX, buffer);
 
