@@ -125,7 +125,7 @@ void publishFilter(const Imu::FilterData &data) {
   output.bias_covariance_status = data.biasUncertaintyStatus;
 
   char buffer[512];
-  sprintf(buffer,"%lf %lf %lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf",rov_get_time(), ros::Time::now().toSec(),output.header.stamp.toSec(),output.orientation.x,output.orientation.y,output.orientation.z,output.orientation.w,output.bias.x,output.bias.y,output.bias.z);
+  sprintf(buffer,"%.9lf %.9lf %.9lf,%lf,%lf,%lf,%lf,%.9lf,%.9lf,%.9lf",rov_get_time(), ros::Time::now().toSec(),output.header.stamp.toSec(),output.orientation.x,output.orientation.y,output.orientation.z,output.orientation.w,output.bias.x,output.bias.y,output.bias.z);
 
   log_this_now_dsl_format(LOG_FID_MST_FILT_FORMAT,(char *) LOG_FID_MST_FILT_SUFFIX, buffer);
   
