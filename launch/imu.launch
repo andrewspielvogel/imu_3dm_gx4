@@ -16,7 +16,7 @@
     <arg name="baudrate" default="921600"/>
 
     <!-- Data rate in Hz -->
-    <arg name="imu_rate" default="1000"/>
+    <arg name="imu_rate" default="500"/>
     <arg name="filter_rate" default="100"/>
 
     <!-- Enable/Disable the magnetometer -->
