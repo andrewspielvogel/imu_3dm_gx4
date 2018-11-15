@@ -7,6 +7,9 @@
 #include <geometry_msgs/Vector3Stamped.h>
 #include <geometry_msgs/QuaternionStamped.h>
 
+#include <tf/tf.h>
+#include <math.h>
+
 #include <dscl_msgs/FilterOutput.h>
 #include <dscl_msgs/Imu9DOF.h> 
 #include "imu_3dm_gx4/imu.hpp"
@@ -108,6 +111,25 @@ void publishFilter(const Imu::FilterData &data) {
   output.bias.y = data.bias[1];
   output.bias.z = data.bias[2];
 
+  // 2018-11-15 LLW Added conversion to euler angles
+  // creat tf quaternion q 
+  tf::Quaternion q(output.orientation.x,
+		   output.orientation.y,
+		   output.orientation.z,
+		   output.orientation.w);
+  // convert to tf rotation matrix m
+  tf::Matrix3x3 m(q);
+
+  // convert to Euler angles in rad
+  m.getRPY(output.euler.x,
+	   output.euler.y,
+	   output.euler.z);
+  
+  // convert for convenience when echoing to euler in degrees
+  output.euler_degree.x = output.euler.x * 180.0 / M_PI;
+  output.euler_degree.y = output.euler.y * 180.0 / M_PI;  
+  output.euler_degree.z = output.euler.z * 180.0 / M_PI;  
+  
   output.bias_covariance[0] = data.biasUncertainty[0]*data.biasUncertainty[0];
   output.bias_covariance[4] = data.biasUncertainty[1]*data.biasUncertainty[1];
   output.bias_covariance[8] = data.biasUncertainty[2]*data.biasUncertainty[2];
